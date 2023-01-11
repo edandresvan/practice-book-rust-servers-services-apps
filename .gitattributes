@@ -1,0 +1,7 @@
+### Git Attributes
+## More info: https://docs.github.com/es/get-started/getting-started-with-git/configuring-git-to-handle-line-endings
+
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+# Declare line endings on checkout.
+eol=lf
