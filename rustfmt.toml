@@ -5,4 +5,5 @@ force_multiline_blocks = true
 max_width = 90
 reorder_imports = true
 group_imports = "StdExternalCrate"
-imports_granularity = "Crate"
+imports_granularity = "Module"
+single_line_if_else_max_width = 70

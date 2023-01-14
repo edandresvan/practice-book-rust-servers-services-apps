@@ -37,11 +37,7 @@ impl<'a> From<HttpResponse<'a>> for String {
       &res.status_code(),
       &res.status_text(),
       &res.headers(),
-      if res.body.is_some() {
-        res.body().len()
-      } else {
-        0
-      },
+      if res.body.is_some() { res.body().len() } else { 0 },
       &res.body()
     )
   }
@@ -220,7 +216,7 @@ mod tests {
       body: None,
     };
 
-    let http_actual: String = response_actual.into();
+    let http_actual: String = String::from(response_actual);
     let http_expected =
       "HTTP/1.1 404 Not Found\r\nContent-Type:text/html\r\nContent-Length: 0\r\n\r\n";
 

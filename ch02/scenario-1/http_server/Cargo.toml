@@ -1,5 +1,5 @@
 [package]
-name = "http-server"
+name = "http_server"
 version = "0.1.0"
 rust-version = "1.66.1"
 edition = "2021"
@@ -7,3 +7,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+serde = { version = "1.*" , features = ["derive"] }
+serde_json = { version = "1.*" }
+http = { path = "../http" }
