@@ -1,12 +1,17 @@
 [package]
 name = "tutor-nodb"
 version = "0.1.0"
+rust-version = "1.66.1"
 edition = "2021"
+default-run = "tutor-service"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [[bin]]
 name = "basic-server"
+
+[[bin]]
+name = "tutor-service"
 
 [dependencies]
 actix-web = { version = "4.2.*" }
