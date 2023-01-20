@@ -34,8 +34,8 @@ pub async fn new_course(
     .clone()
     .into_iter()
     .filter(|course| course.tutor_id == new_course.tutor_id)
-    .collect::<Vec<Course>>()
-    .len();
+    .count();
+  //.len();
 
   // Create a new course object with the given data. Generate the new course ID based on the number of filtered courses plus 1.
   let new_course = Course {
@@ -49,6 +49,12 @@ pub async fn new_course(
   HttpResponse::Ok().json("Added course")
 } // end fn new_course()
 
+/// Gets the collection of courses belonging to the give tutor ID.
+///
+/// # Arguments
+///
+/// * `app_state` - Container of the application state.
+/// * `params` - Collection of HTTP query parameters.
 pub async fn get_courses_for_tutor(
   app_state: web::Data<AppState>,
   params: web::Path<usize>,
