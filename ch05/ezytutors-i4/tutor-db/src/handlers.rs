@@ -63,10 +63,11 @@ pub async fn get_course_details(
 pub async fn post_new_course(
   new_course: web::Json<Course>,
   app_state: web::Data<AppState>,
-) -> HttpResponse {
-  let courses: Vec<Course> = post_new_course_db(&app_state.db, new_course.into()).await;
-
-  HttpResponse::Ok().json(courses)
+) -> Result<HttpResponse, EzyTutorError> {
+  let response = post_new_course_db(&app_state.db, new_course.into())
+    .await
+    .map(|courses| HttpResponse::Ok().json(courses));
+  response
 } // end fn post_new_course()
 
 #[cfg(test)]
@@ -149,7 +150,7 @@ mod tests {
     };
 
     let course_param = web::Json(new_course);
-    let response: HttpResponse = post_new_course(course_param, app_state).await;
+    let response: HttpResponse = post_new_course(course_param, app_state).await.unwrap();
 
     assert_eq!(response.status(), StatusCode::OK);
   }

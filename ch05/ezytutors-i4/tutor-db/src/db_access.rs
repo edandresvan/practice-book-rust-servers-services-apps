@@ -89,12 +89,11 @@ pub async fn get_course_details_db(
 pub async fn post_new_course_db(
   db_pool: &PgPool,
   new_course: Course,
-) -> Vec<Course> {
+) -> Result<Vec<Course>, EzyTutorError> {
   // Prepare the SQL insert
-  let course_rows = sqlx::query!("INSERT INTO course_ch05 (course_id, tutor_id, course_name) VALUES ($1, $2, $3) RETURNING course_id, tutor_id, course_name, posted_time", new_course.course_id as i32, new_course.tutor_id as i32, new_course.course_name).fetch_all(db_pool).await.unwrap();
-
-  // Create a collection of courses object from the courses rows
-  course_rows
+  let rows = sqlx::query!("INSERT INTO course_ch05 (course_id, tutor_id, course_name) VALUES ($1, $2, $3) RETURNING course_id, tutor_id, course_name, posted_time", new_course.course_id as i32, new_course.tutor_id as i32, new_course.course_name).fetch_all(db_pool).await?;
+  // Create a collection of courses object from the courses
+  let courses = rows
     .iter()
     .map(|course_row| Course {
       course_id: course_row.course_id as u32,
@@ -102,5 +101,7 @@ pub async fn post_new_course_db(
       course_name: course_row.course_name.clone(),
       posted_time: Some(NaiveDateTime::from(course_row.posted_time.unwrap())),
     })
-    .collect()
+    .collect();
+
+  Ok(courses)
 }
