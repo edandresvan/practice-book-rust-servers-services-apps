@@ -51,20 +51,33 @@ pub async fn get_course_details_db(
   db_pool: &PgPool,
   tutor_id: i32,
   course_id: i32,
-) -> Vec<Course> {
+) -> Result<Vec<Course>, EzyTutorError> {
   // SQL query to retrieve course rows
-  let course_rows = sqlx::query!("SELECT tutor_id, course_id, course_name, posted_time FROM course_ch05 WHERE tutor_id = $1 AND course_id = $2", tutor_id, course_id).fetch_all(db_pool).await.unwrap();
+  let rows = sqlx::query!("SELECT tutor_id, course_id, course_name, posted_time FROM course_ch05 WHERE tutor_id = $1 AND course_id = $2", tutor_id, course_id).fetch_all(db_pool).await;
 
-  // Create a collection of courses object from the courses rows
-  course_rows
-    .iter()
-    .map(|course_row| Course {
-      course_id: course_row.course_id as u32,
-      tutor_id: course_row.tutor_id as u32,
-      course_name: course_row.course_name.clone(),
-      posted_time: Some(NaiveDateTime::from(course_row.posted_time.unwrap())),
-    })
-    .collect()
+  match rows {
+    Ok(course_rows) => {
+      // Create a collection of courses object from the courses rows
+      let courses: Vec<Course> = course_rows
+        .iter()
+        .map(|course_row| Course {
+          course_id: course_row.course_id as u32,
+          tutor_id: course_row.tutor_id as u32,
+          course_name: course_row.course_name.clone(),
+          posted_time: Some(NaiveDateTime::from(course_row.posted_time.unwrap())),
+        })
+        .collect();
+
+      if courses.len() > 0 {
+        return Ok(courses);
+      } else {
+        return Err(EzyTutorError::NotFound("Course id not found.".to_string()));
+      }
+    }
+    Err(err) => {
+      return Err(EzyTutorError::DBError(err.to_string()));
+    }
+  }
 } // end fn get_course_details_db()
 
 /// Creates (inserts) the given course into the database.

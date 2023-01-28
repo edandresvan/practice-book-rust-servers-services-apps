@@ -44,13 +44,14 @@ pub async fn get_courses_for_tutor(
 pub async fn get_course_details(
   app_state: web::Data<AppState>,
   params: web::Path<(usize, usize)>,
-) -> HttpResponse {
+) -> Result<HttpResponse, EzyTutorError> {
   let (tutor_id, course_id) = params.into_inner();
 
-  let courses: Vec<Course> =
-    get_course_details_db(&app_state.db, tutor_id as i32, course_id as i32).await;
+  let response = get_course_details_db(&app_state.db, tutor_id as i32, course_id as i32)
+    .await
+    .map(|courses| HttpResponse::Ok().json(courses));
 
-  HttpResponse::Ok().json(courses)
+  response
 } // end fn get_course_details()
 
 /// Handler for creating a new course.
@@ -94,7 +95,8 @@ mod tests {
     });
 
     let tutor_id: web::Path<usize> = web::Path::from(1);
-    let response: HttpResponse = get_courses_for_tutor(app_state, tutor_id).await.unwrap();
+    let response: HttpResponse =
+      get_courses_for_tutor(app_state, tutor_id).await.unwrap();
 
     assert_eq!(response.status(), StatusCode::OK);
   } // end fn test_get_all_courses_success()
@@ -115,7 +117,7 @@ mod tests {
     });
 
     let params: web::Path<(usize, usize)> = web::Path::from((1, 1));
-    let response: HttpResponse = get_course_details(app_state, params).await;
+    let response: HttpResponse = get_course_details(app_state, params).await.unwrap();
     assert_eq!(response.status(), StatusCode::OK);
   } // end fn test_get_course_detail()
 
