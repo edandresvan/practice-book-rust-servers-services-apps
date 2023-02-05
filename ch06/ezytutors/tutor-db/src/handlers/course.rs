@@ -270,15 +270,16 @@ mod tests {
       db: pool,
     });
 
-    let parameters: web::Path<(u32, u32)> = web::Path::from((1, 1));
+    let parameters: web::Path<(u32, u32)> = web::Path::from((1, 16));
 
-    let response = delete_course(app_state, parameters).await.unwrap();
+    let response = delete_course(app_state, parameters).await;
 
-    assert_eq!(response.status(), StatusCode::OK);
+    assert!(response.is_ok());
+    assert_eq!(response.unwrap().status(), StatusCode::OK);
   } // end fn test_delete_course_success()
 
   #[actix_rt::test]
-  #[ignore = "execute after successful update"]
+  // #[ignore = "execute after successful update"]
   async fn test_delete_course_failure() {
     dotenv().ok();
 
@@ -293,7 +294,7 @@ mod tests {
       db: pool,
     });
 
-    let parameters: web::Path<(u32, u32)> = web::Path::from((100, 1));
+    let parameters: web::Path<(u32, u32)> = web::Path::from((1, 16));
 
     let response = delete_course(app_state, parameters).await;
 

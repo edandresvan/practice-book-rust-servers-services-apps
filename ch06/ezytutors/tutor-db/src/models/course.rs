@@ -3,37 +3,37 @@ use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 
 /// Represents a course dictated by a tutor.
-#[derive(Serialize, Debug, Clone, sqlx::FromRow)]
+#[derive(Serialize, Debug, Clone)]
 pub struct Course {
   /// Unique identifier (ID) of the course.
   pub course_id: i32,
   /// Unique identifier (ID) of the tutor.
   pub tutor_id: i32,
   /// Name of the course.
-  #[sqlx(rename = "course_name")]
+  // #[sqlx(rename = "course_name")]
   pub name: String,
   /// Timestamp when the course was created.
   pub posted_time: Option<NaiveDateTime>,
   /// Textual description of the course.
-  #[sqlx(rename = "course_description")]
+  // #[sqlx(rename = "course_description")]
   pub description: Option<String>,
   /// Format of course delivery.
-  #[sqlx(rename = "course_format")]
+  // #[sqlx(rename = "course_format")]
   pub format: Option<String>,
   /// Document or brochure describing the course.
-  #[sqlx(rename = "course_estructure")]
+  // #[sqlx(rename = "course_estructure")]
   pub structure: Option<String>,
   /// Length of the course.
-  #[sqlx(rename = "course_duration")]
+  // #[sqlx(rename = "course_duration")]
   pub duration: Option<String>,
   /// Course price in U.S. dollars.
-  #[sqlx(rename = "course_price")]
+  // #[sqlx(rename = "course_price")]
   pub price: Option<i32>,
   /// Course language.
-  #[sqlx(rename = "course_language")]
+  // #[sqlx(rename = "course_language")]
   pub language: Option<String>,
   /// Level of the student of the course.
-  #[sqlx(rename = "course_level")]
+  // #[sqlx(rename = "course_level")]
   pub level: Option<String>,
 }
 

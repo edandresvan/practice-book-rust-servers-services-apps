@@ -1,5 +1,5 @@
 use crate::models::course::*;
-use sqlx::postgres::PgPool;
+use sqlx::postgres::{PgPool, PgQueryResult};
 
 use crate::errors::EzyTutorError;
 
@@ -163,25 +163,17 @@ pub async fn update_course_details_db(db_pool: &PgPool, tutor_id: u32, course_id
 /// * `course_id`: Course ID.
 pub async fn delete_course_db(db_pool: &PgPool, tutor_id: u32, course_id: u32) -> Result<String, EzyTutorError> {
   // Prepare the SQL delete statement
-  let raw_row = sqlx::query!(
+  let query_result: PgQueryResult = sqlx::query!(
     r#"DELETE FROM course_ch06 
-    WHERE tutor_id = $1 AND course_id = $2 RETURNING *"#, 
+    WHERE tutor_id = $1 AND course_id = $2"#, 
   tutor_id as i32, course_id as i32)
-  .fetch_all(db_pool)
-  .await;
+  .execute(db_pool)
+  .await?;
 
-  if raw_row.is_err() {
-    return Err(EzyTutorError::DBError("Database error while deleting course.".to_string()));
+   match query_result.rows_affected() {
+    0 => Err(EzyTutorError::NotFound(format!("Course id `{course_id}` not found"))),
+    _ => Ok(format!("Deleted course `{course_id}`")),
   }
-
-  let rows = raw_row.unwrap();
-
-  if !rows.is_empty() {
-    Ok(format!("Deleted course `{course_id}`"))
-  } else {
-    Err(EzyTutorError::NotFound(format!("Course id `{course_id}` not found")))
-  }
-
   
 } // end fn delete_course_db
 
