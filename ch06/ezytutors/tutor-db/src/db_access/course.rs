@@ -27,7 +27,7 @@ pub async fn get_courses_for_tutor_db(
   Ok(courses)
 } // end fn get_courses_for_tutor_db()
 
-/// Gets all courses for the given tutor and course identifiers.
+/// Gets the course for the given tutor and course identifiers.
 ///
 /// # Arguments
 ///

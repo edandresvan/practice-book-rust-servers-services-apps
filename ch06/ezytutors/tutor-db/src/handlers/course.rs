@@ -24,7 +24,7 @@ pub async fn get_courses_for_tutor(
     .map(|courses| HttpResponse::Ok().json(courses))
 } // end fn get_courses_for_tutor()
 
-/// Get the course datails for the given tutor and course identifiers (IDs).
+/// Get the course details for the given tutor and course identifiers (IDs).
 ///
 /// # Arguments
 ///
@@ -48,7 +48,7 @@ pub async fn get_course_details(
 ///
 /// # Arguments
 ///
-/// * `new_course` - New course to create comming from the HTTP request.
+/// * `course` - New course to create comming from the HTTP request.
 /// * `app_state` - Container of the application state.
 pub async fn post_new_course(
   course: web::Json<CreateCourse>,
@@ -88,9 +88,9 @@ pub async fn update_course_details(
 /// * `params` - Collection of HTTP query parameters.
 pub async fn delete_course(
   app_state: web::Data<AppState>,
-  path: web::Path<(u32, u32)>,
+  params: web::Path<(u32, u32)>,
 ) -> Result<HttpResponse, EzyTutorError> {
-  let (tutor_id, course_id) = path.into_inner();
+  let (tutor_id, course_id) = params.into_inner();
 
   // let response = delete_course_db(&app_state.db, tutor_id, course_id).await?;
 

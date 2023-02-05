@@ -1,6 +1,3 @@
-BEGIN;
--- Drop table if it already exists
-DROP TABLE IF EXISTS course_ch06;
 -- Create the table for courses
 CREATE TABLE course_ch06 (
   course_id serial PRIMARY KEY,
@@ -15,8 +12,3 @@ CREATE TABLE course_ch06 (
   course_language varchar(30),
   course_level varchar(30)
 );
--- Seed data
-/* INSERT INTO course_ch06 (course_id, tutor_id, name, posted_time)
-VALUES (1, 1, 'First course', '2021-03-17 05:40:00'),
-  (2, 1, 'Second course', '2021-03-18 05:45:00'); */
-COMMIT;
