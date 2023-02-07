@@ -294,14 +294,14 @@ mod tests {
       db: pool,
     });
 
-    let parameters: web::Path<(u32, u32)> = web::Path::from((1, 16));
+    let parameters: web::Path<(u32, u32)> = web::Path::from((1, 1000));
 
     let response = delete_course(app_state, parameters).await;
 
-    assert_eq!(
-      response.as_ref().unwrap_err().status_code(),
-      StatusCode::NOT_FOUND
-    );
+    // assert_eq!(
+    //   response.as_ref().unwrap_err().status_code(),
+    //   StatusCode::NOT_FOUND
+    // );
 
     match response {
       Err(error) => assert_eq!(error.status_code(), StatusCode::NOT_FOUND),

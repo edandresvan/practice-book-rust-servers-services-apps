@@ -39,11 +39,11 @@ impl From<web::Json<CreateTutor>> for CreateTutor {
 #[derive(Deserialize, Debug, Clone)]
 pub struct UpdateTutor {
   /// Full name of the tutor.
-  name: Option<String>,
+  pub name: Option<String>,
   /// URL of the image profile of the tutor.
-  pic_url: Option<String>,
+  pub pic_url: Option<String>,
   /// Brief profile of the tutor.
-  profile: Option<String>,
+  pub profile: Option<String>,
 }
 
 impl From<web::Json<UpdateTutor>> for UpdateTutor {

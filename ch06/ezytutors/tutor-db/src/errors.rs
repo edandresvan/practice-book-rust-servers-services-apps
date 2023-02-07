@@ -10,6 +10,8 @@ pub enum EzyTutorError {
   ActixError(String),
   /// Error from not found resources.
   NotFound(String),
+  /// Error for invalid input parameters.
+  InvalidInput(String),
 }
 
 /// Represents an error message to be send as a response to the user or client.
@@ -35,6 +37,10 @@ impl EzyTutorError {
         println!("A not found error has ocurred: {message}");
         message.into()
       }
+      EzyTutorError::InvalidInput(message) => {
+        println!("Invalid parameters were given: {message:?}");
+        message.into()
+      }
     }
   } // end fn error_response()
 }
@@ -47,6 +53,7 @@ impl actix_web::error::ResponseError for EzyTutorError {
         StatusCode::INTERNAL_SERVER_ERROR
       }
       EzyTutorError::NotFound(_message) => StatusCode::NOT_FOUND,
+      EzyTutorError::InvalidInput(_message) => StatusCode::BAD_REQUEST,
     }
   }
 
@@ -67,6 +74,7 @@ impl std::fmt::Display for EzyTutorError {
       Self::DBError(message) => write!(f, "EzyTutorError::DBError : {message}"),
       Self::ActixError(message) => write!(f, "EzyTutorError::ActixError : {message}"),
       Self::NotFound(message) => write!(f, "EzyTutorError::NotFound : {message}"),
+      Self::InvalidInput(message) => write!(f, "EzyTutorError::InvalidInput : {message}"),
     }
   }
 }

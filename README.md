@@ -83,8 +83,14 @@ $ psql --host=localhost --port=5432 --dbname=ezytutors_db --username=truuser --p
 ### Execute PostgreSQL Scripts
 
 ```bash
+$ cd src/db-scripts;
 $ psql --host=localhost --port=5432 --dbname=ezytutors_db --username=truuser --password --file=src/database.sql;
 ``` 
+
+```bash
+$ cd src/db-scripts;
+$ psql --host=localhost --port=5432 --user=truuser --dbname=ezytutors_db --file=db-create.sql
+```
 
 
 

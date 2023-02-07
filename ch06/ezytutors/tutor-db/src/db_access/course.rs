@@ -67,15 +67,15 @@ pub async fn post_new_course_db(
   course: CreateCourse,
 ) -> Result<Vec<Course>, EzyTutorError> {
   // Prepare the SQL insert statement
-  let courses: Vec<Course> = sqlx::query_as!(Course, 
+  let course = sqlx::query_as!(Course, 
     r#"INSERT INTO course_ch06 (tutor_id, course_name, course_description, course_format, course_structure, course_duration, course_language, course_level, course_price) 
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
     RETURNING course_id, tutor_id, course_name as name, posted_time, course_description as "description?", course_format as "format?", course_structure as "structure?", course_duration as "duration?", course_language as "language?", course_level as "level?", course_price as "price?""#, 
     course.tutor_id, course.name, course.description, course.format, course.structure, course.duration, course.language, course.level, course.price)
-    .fetch_all(db_pool)
+    .fetch_one(db_pool)
     .await?;
 
-  Ok(courses)
+  Ok(vec![course])
 } // end fn post_new_course_db()
 
 /// Updates the given course parameteres in the database.
@@ -138,7 +138,8 @@ pub async fn update_course_details_db(db_pool: &PgPool, tutor_id: u32, course_id
   course_structure = $4, course_duration = $5, course_language = $6,
   course_level = $7, course_price = $8 
   WHERE tutor_id = $9 AND course_id = $10 
-  RETURNING course_id, tutor_id, course_name as name, posted_time, course_description as "description?", course_format as "format?", course_structure as "structure?", course_duration as "duration?", course_language as "language?", course_level as "level?", course_price as "price?" "#,
+  RETURNING 
+  course_id, tutor_id, course_name as name, posted_time, course_description as "description?", course_format as "format?", course_structure as "structure?", course_duration as "duration?", course_language as "language?", course_level as "level?", course_price as "price?" "#,
   existing_course.name, existing_course.description, existing_course.format, 
   existing_course.structure, existing_course.duration, existing_course.language, 
   existing_course.level, existing_course.price, 
