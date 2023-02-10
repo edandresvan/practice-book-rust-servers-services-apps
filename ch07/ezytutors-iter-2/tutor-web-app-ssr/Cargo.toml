@@ -1,0 +1,13 @@
+[package]
+name = "tutor-web-app-ssr"
+version = "0.1.0"
+rust-version = "1.67"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = { version = "4.3.*" }
+actix-files = { version = "0.6.*" }
+serde = { version = "1.0.*", features = ["derive"] }
+tera = { version = "1" }
