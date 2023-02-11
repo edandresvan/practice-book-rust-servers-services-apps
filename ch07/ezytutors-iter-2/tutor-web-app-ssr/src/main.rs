@@ -65,10 +65,64 @@ async fn main() -> std::io::Result<()> {
 
     App::new()
       // inject the tera template engine
-      .app_data(web::Data::new(tera)) 
+      .app_data(web::Data::new(tera))
       .configure(app_config)
   })
   .bind(socket_address)?
   .run()
   .await
 } // end fn main()
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+  use actix_web::dev::{Service, ServiceResponse};
+  use actix_web::http::{header::HeaderValue, header::CONTENT_TYPE, StatusCode};
+  use actix_web::test;
+  //use actix_web::
+
+  use actix_web::web::{Data, Form};
+
+  #[actix_rt::test]
+  async fn test_handle_post_unit_test_1() {
+    let params = Form(Tutor {
+      name: "Heny".to_string(),
+    });
+
+    let tera = Tera::new(concat!(env!("CARGO_MANIFEST_DIR"), "/static/**/*")).unwrap();
+
+    let webdata_tera = web::Data::new(tera);
+
+    let response = handler_post_tutor(webdata_tera, params).await.unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+    assert_eq!(
+      response.headers().get(CONTENT_TYPE).unwrap(),
+      HeaderValue::from_static("text/html")
+    );
+  } // end fn test_handle_post_test_1()
+
+  #[actix_rt::test]
+  async fn test_handle_post_integration_test_1() {
+    let tera = Tera::new(concat!(env!("CARGO_MANIFEST_DIR"), "/static/**/*")).unwrap();
+
+    let app =
+      test::init_service(App::new().app_data(Data::new(tera)).configure(app_config))
+        .await;
+
+    let request = test::TestRequest::post()
+      .uri("/tutors")
+      .set_form(&Tutor {
+        name: "Terry".to_string(),
+      })
+      .to_request();
+
+    let response: ServiceResponse = app.call(request).await.unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+    assert_eq!(
+      response.headers().get(CONTENT_TYPE).unwrap(),
+      HeaderValue::from_static("text/html")
+    );
+  }
+}

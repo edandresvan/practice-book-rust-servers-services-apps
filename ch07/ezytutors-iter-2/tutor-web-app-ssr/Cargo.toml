@@ -11,3 +11,4 @@ actix-web = { version = "4.3.*" }
 actix-files = { version = "0.6.*" }
 serde = { version = "1.0.*", features = ["derive"] }
 tera = { version = "1" }
+actix-rt = { version = "2.8" }
