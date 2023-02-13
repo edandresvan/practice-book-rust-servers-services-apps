@@ -7,37 +7,37 @@ use actix_web::{
 use serde::{Deserialize, Serialize};
 use tera::Tera;
 
+use awc::Client;
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Tutor {
+  pub tutor_id: i32,
   pub name: String,
+  pub pic_url: String,
+  pub profile: String,
 }
 
 async fn handle_get_tutors(
   template_engine: web::Data<tera::Tera>
 ) -> Result<HttpResponse, actix_web::error::Error> {
-  let tutors: Vec<Tutor> = vec![
-    Tutor {
-      name: "Anne - Tutor 1".to_string(),
-    },
-    Tutor {
-      name: "David - Tutor 2".to_string(),
-    },
-    Tutor {
-      name: "Marie Tutor 3".to_string(),
-    },
-    Tutor {
-      name: "Thomas Tutor 4".to_string(),
-    },
-    Tutor {
-      name: "Jenny Tutor 5".to_string(),
-    },
-    Tutor {
-      name: "John Tutor 6".to_string(),
-    },
-  ];
+  let client = Client::new();
+
+  let response = client
+    .get("http://localhost:3000/tutors")
+    .send()
+    .await
+    .unwrap()
+    .body()
+    .await
+    .unwrap();
+
+  // Convert the received bytes from the network into a str slice
+  let raw_list: &str = std::str::from_utf8(&response).unwrap();
+  // Deserialize the str slice into a collection of tutors.
+  let tutors_list: Vec<Tutor> = serde_json::from_str(raw_list).unwrap();
 
   let mut context = tera::Context::new();
-  context.insert("tutors", &tutors);
+  context.insert("tutors", &tutors_list);
 
   let html_contents: String = template_engine
     .render("list.html", &context)
