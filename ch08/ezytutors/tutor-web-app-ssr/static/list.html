@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>A List of tutors</title>
+</head>
+
+<body>
+
+  <h1 class="text-2xl font-bold mt-8 mb-5">Tutors List</h1>
+  <ol class="list-disc list-inside my-5 pl-2">
+    {% for tutor in tutors %}
+    <li class="list-decimal list-inside my-5 pl-2">
+      <h5 class="text-1xl font-bold mb-4 mt-0">{{tutor.name}}</h5>
+      <p>{{tutor.pic_url}} -- {{tutor.profile}}</p>
+    </li>
+    {% endfor %}
+  </ol>
+</body>
+
+</html>
