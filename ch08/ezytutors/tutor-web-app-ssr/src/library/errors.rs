@@ -1,4 +1,4 @@
-use actix_web::{error, http::StatusCode, HttpResponse, Result};
+use actix_web::{http::StatusCode, HttpResponse};
 use serde::Serialize;
 
 /// Represents an error in the Ezy System.
@@ -72,15 +72,20 @@ impl std::fmt::Display for EzyTutorError {
     &self,
     f: &mut std::fmt::Formatter<'_>,
   ) -> std::fmt::Result {
-    write!(f, "{self}")
+    match self {
+      Self::DBError(message) => write!(f, "EzyTutorError::DBError : {message}"),
+      Self::ActixError(message) => write!(f, "EzyTutorError::ActixError : {message}"),
+      Self::NotFound(message) => write!(f, "EzyTutorError::NotFound : {message}"),
+      Self::TeraError(message) => write!(f, "EzyTutorError::TeraError : {message}"),
+    }
   } // end fn fmt()
 } // end impl std::fmt::Display
 
 // Allow the conversion from EzyError into an Actix error.
-impl From <actix_web::error::Error> for EzyTutorError {
+impl From<actix_web::error::Error> for EzyTutorError {
   fn from(value: actix_web::error::Error) -> Self {
-      EzyTutorError::ActixError(value.to_string())
-  } // end fn from() 
+    EzyTutorError::ActixError(value.to_string())
+  } // end fn from()
 } // impl From <actix_web::error::Error>
 
 // Allow the conversion from EzyTutor::DBError into a SQLx error.

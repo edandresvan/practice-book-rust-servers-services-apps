@@ -1,4 +1,4 @@
-# Practice Book: Rust Web Development
+ Practice Book: Rust Web Development
 
 
 This repository contains my practical exercises from the book ["Rust Servers, Services, and Apps" by Prabhu Eshwarla (Manning)](https://www.manning.com/books/rust-servers-services-and-apps).
@@ -63,7 +63,7 @@ Create the PostgreSQL container with the previously created disk volume and the 
 $ podman run --interactive --publish 5432:5432 --volume ezytutors_volume:/var/lib/postgresql/data --memory 500m --env POSTGRES_PASSWORD=myP4ssw0rd --name ezytutors docker.io/library/postgres:14.6-bullseye;
 ```
 
-### Create the PostgreSQL Database
+### Create the PostgreSQL Database for the EzyTutors Service (Back-end)
 
 ```bash
 $ psql --host=localhost --port=5432 --username=postgres --password;
@@ -78,6 +78,23 @@ postgres=# \q
 
 ```bash
 $ psql --host=localhost --port=5432 --dbname=ezytutors_db --username=truuser --password;
+```
+
+### Create the PostgreSQL Database for the SSR Front-end
+
+```bash
+$ psql --host=localhost --port=5432 --username=postgres --password;
+
+
+postgres=# create database ezytutors_web_ssr_db;
+postgres=# create user ssruser with password 'mypassword';
+postgres=# grant all privileges on database ezytutors_web_ssr_db to ssruser;
+postgres=# \q
+
+```
+
+```bash
+$ psql --host=localhost --port=5432 --ezytutors_web_ssr_db --username=ssruser --password;
 ```
 
 ### Execute PostgreSQL Scripts
