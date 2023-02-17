@@ -12,6 +12,10 @@ use crate::state::AppState;
 use serde_json::json;
 
 /// Handles the request to show the registration form.
+///
+/// # Arguments
+/// 
+/// * `template_engine` - Tera engine object to create the HTML page.
 pub async fn show_register_form(
   template_engine: web::Data<tera::Tera>
 ) -> Result<HttpResponse, actix_web::error::Error> {
@@ -35,6 +39,12 @@ pub async fn show_register_form(
 } // end fn show_register_form()
 
 /// Handles the requests to process a registration.
+///
+/// # Arguments
+/// 
+/// * `template_engine` - Tera engine object to create the HTML page.
+/// * `app_state` - Container of the application state.
+/// * `params` - Collection of HTTP query parameters.
 pub async fn handle_register(
   template_engine: web::Data<tera::Tera>,
   app_state: web::Data<AppState>,
@@ -68,6 +78,12 @@ pub async fn handle_register(
   }
 } // end fn handle_register()
 
+/// Register a new user from the given parameters.
+/// 
+/// # Arguments
+/// 
+/// * `app_state` - Container of the application state.
+/// * `params` - Collection of HTTP query parameters.
 async fn register_new_user(
   app_state: &web::Data<AppState>,
   params: &web::Form<TutorRegisterForm>,
@@ -117,6 +133,11 @@ async fn register_new_user(
 } // end fn register_new_user()
 
 /// Shows a message informing that another user already exists with the specified username in the parameters set.
+/// 
+/// # Arguments
+/// 
+/// * `template_engine` - Tera engine object to create the HTML page.
+/// * `params` - Collection of HTTP query parameters.
 async fn show_error_existing_user(
   template_engine: &web::Data<tera::Tera>,
   params: &web::Form<TutorRegisterForm>,
