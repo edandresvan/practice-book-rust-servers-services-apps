@@ -1,4 +1,4 @@
--- Create the table for courses
+/* Create the table for courses */
 CREATE TABLE course_ch06 (
   course_id serial PRIMARY KEY,
   tutor_id integer NOT NULL,

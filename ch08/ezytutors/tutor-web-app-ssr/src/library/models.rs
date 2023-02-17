@@ -28,16 +28,15 @@ pub struct TutorResponse {
   pub pic_url: String,
   /// Profile bio of the tutor.
   pub profile: String,
-} // end struct TutorResponse 
+} // end struct TutorResponse
 
 /// Represents info about user credentials for the authentication.
+#[derive(Serialize, Deserialize, Debug)]
 pub struct User {
   /// Username.
   pub username: String,
   /// Unique identifier (ID) of the tutor.
   pub tutor_id: Option<i32>,
-   /// Password of the user.
+  /// Password of the user.
   pub user_password: String,
 } // end struct User
-
-
