@@ -1,0 +1,9 @@
+{
+  "sqltools.connections": [
+  
+  ],
+  "sqltools.format": {
+    "language": "sql",
+    "linesBetweenQueries": 1
+  }
+}
