@@ -1,5 +1,5 @@
 use crate::errors::EzyTutorError;
-use crate::models::*;
+use crate::models::user::User;
 use sqlx::postgres::PgPool;
 
 /// Gets the user info using the given username.

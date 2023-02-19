@@ -5,10 +5,8 @@ use actix_web::Result;
 use crate::errors::EzyTutorError;
 
 use crate::db_access::*;
-use crate::models::TutorRegisterForm;
-use crate::models::TutorResponse;
-use crate::models::TutorSigninForm;
-use crate::models::User;
+use crate::models::tutor::*;
+use crate::models::user::User;
 use crate::state::AppState;
 use serde_json::json;
 
