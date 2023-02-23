@@ -53,22 +53,64 @@ pub async fn handle_insert_course(
 ///
 /// * `app_state`: Container of the application state.
 /// * `template_engine`:  Tera engine object to create the HTML page.
+/// * `path`: Collection of path parameters.
+/// * `params` - Collection of HTTP query parameters.
 pub async fn handle_update_course(
-  app_state: web::Data<AppState>,
-  template_engine: web::Data<tera::Tera>,
+  _app_state: web::Data<AppState>,
+  _template_engine: web::Data<tera::Tera>,
+  path: web::Path<(i32, i32)>,
+  params: web::Json<CourseUpdate>,
 ) -> Result<HttpResponse, ActixError> {
-  Ok(HttpResponse::Ok().body("Got update"))
-} // end fn handle_update_course()
+  let (tutor_id, course_id) = path.into_inner();
 
+  let course_json = json!({
+    "name": &params.name,
+    "description": &params.description,
+    "format": &params.format,
+    "structure": &params.structure,
+    "duration": &params.duration,
+    "price": &params.price,
+    "language": &params.language,
+    "level": &params.level,
+  });
+
+  let http_client = awc::Client::new();
+  let update_url = format!("http://localhost:3000/courses/{tutor_id}/{course_id}");
+  
+
+  let response_raw = http_client
+    .put(update_url)
+    .send_json(&course_json)
+    .await
+    .unwrap()
+    .body()
+    .await?;
+
+  let courses: Vec<Course> = serde_json::from_str(std::str::from_utf8(&response_raw)?)?;
+
+  Ok(HttpResponse::Ok().json(courses))
+} // end fn handle_update_course()
 /// Register a new user from the given parameters.
 ///
 /// # Arguments
 ///
 /// * `app_state`: Container of the application state.
 /// * `template_engine`:  Tera engine object to create the HTML page.
+/// * `path`: Collection of path parameters.
 pub async fn handle_delete_course(
-  app_state: web::Data<AppState>,
-  template_engine: web::Data<tera::Tera>,
+  _app_state: web::Data<AppState>,
+  _template_engine: web::Data<tera::Tera>,
+  path: web::Path<(i32, i32)>,
 ) -> Result<HttpResponse, ActixError> {
-  Ok(HttpResponse::Ok().body("Got delete"))
+  let (tutor_id, course_id) = path.into_inner();
+
+  let http_client = awc::Client::new();
+
+  let delete_url = format!("http://localhost:3000/courses/{tutor_id}/{course_id}");
+
+  let response_raw = http_client.delete(delete_url).send().await.unwrap().body().await?;
+
+  let response: String = serde_json::from_str(std::str::from_utf8(&response_raw)?)?;
+
+  Ok(HttpResponse::Ok().body(response))
 } // end fn handle_delete_course()
