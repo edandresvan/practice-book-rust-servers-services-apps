@@ -60,7 +60,7 @@ $ podman volume create ezytutors_volume;
 Create the PostgreSQL container with the previously created disk volume and the customizable parameters. The first time, we specify the `root` password.
 
 ```bash
-$ podman run --interactive --publish 5432:5432 --volume ezytutors_volume:/var/lib/postgresql/data --memory 500m --env POSTGRES_PASSWORD=myP4ssw0rd --name ezytutors docker.io/library/postgres:14.6-bullseye;
+$ podman run --interactive --publish 5432:5432 --volume ezytutors_volume:/var/lib/postgresql/data --memory 500m --env POSTGRES_PASSWORD=myP4ssw0rd --name ezytutors docker.io/library/postgres:15-bullseye;
 ```
 
 ### Create the PostgreSQL Database for the EzyTutors Service (Back-end)
