@@ -13,7 +13,7 @@ The original code repository is also located [here in GitHub](https://github.com
 [MIT](https://choosealicense.com/licenses/mit/)
 
 
-The files in this repository are my own practice following the book lessons.|
+The files in this repository are my own practice following the book lessons.
 
 However, the original copyright belongs to Manning Books.
 
